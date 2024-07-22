@@ -19,10 +19,6 @@ func setDefaults() {
 		log.Fatal("DatabaseURI required")
 	}
 
-	if LoggerId == 0 {
-		log.Fatal("LoggerId required")
-	}
-
 	if OwnerId == 0 {
 		OwnerId = 5938660179
 	}

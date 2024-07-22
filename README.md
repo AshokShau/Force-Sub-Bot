@@ -1,13 +1,14 @@
 <html lang="en">
 <body>
 
-# Force Sub Bot 
-[![Go Build](https://github.com/Abishnoi69/Force-Sub-Bot/workflows/build/badge.svg)](https://github.com/Abishnoi69/Force-Sub-Bot/actions?query=workflow%3Abuild+event%3Apush+branch%3Amain)
+<h1>Force Sub Bot</h1>
+
+<a href="https://github.com/Abishnoi69/Force-Sub-Bot/actions?query=workflow%3Abuild+event%3Apush+branch%3Amain"><img src="https://github.com/Abishnoi69/Force-Sub-Bot/workflows/build/badge.svg" alt="build"></a>
+
 <p>This project includes a Telegram bot designed to enforce subscription to a specific channel before allowing users to interact in a group chat. It's built using <a href="https://go.dev">Go</a> and integrates with the Telegram Bot API using <a href="https://github.com/PaulSonOfLars/gotgbot">gotgbot</a>.</p>
 
 <section>
 <h2>Installation Instructions</h2>
-
 <h3>Install Go</h3>
 <ol>
 <li>Clone and install Go:
@@ -38,6 +39,18 @@ source /etc/profile.d/golang_path.sh</code></pre>
 </li>
 <li>Start a new <code>tmux</code> session: <code>sudo apt install tmux && tmux</code></li>
 <li>Run the bot: <code>go run .</code></li>
+</ol>
+</section>
+
+<section>
+<h2>Deploy to Vercel</h2>
+<ol>
+<li>Fork this repository 🍴</li>
+<li>Login your <a href="https://vercel.com/">Vercel</a> account </li>
+<li>Go to your <a href="https://vercel.com/new">Add New Project</a></li>
+<li>Choose the repository you forked</li>
+<li>Configure the environment variables: <code>DB_URI</code></li>
+<li>Tap on Deploy</li>
 </ol>
 </section>
 
