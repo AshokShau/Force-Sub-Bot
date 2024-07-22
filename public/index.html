@@ -221,8 +221,8 @@
 
             let currentUrl = window.location.origin;
             // Use default url if null
-            if (currentUrl == 'null') {
-                currentUrl = 'https://force-sub-bot.vercel.app';
+            if (currentUrl === 'null') {
+                currentUrl = 'https://fallenfsub.abishnoi.me/';
             }
 
             try {
@@ -267,13 +267,11 @@
                     // Start confetti animation
                     startConfetti();
                 } else {
-                    showError(data.description);
-                    return;
+                    return showError(data.description);
                 }
             } catch (error) {
                 console.error(error);
-                showError('An error occurred!');
-                return;
+                return showError('An error occurred!');
             }
         });
 
@@ -319,7 +317,7 @@
         return Math.floor(Math.random() * (to - from + 1) + from);
     }
 
-    function confettiParticle() {
+    function ConfettiParticle() {
         this.x = Math.random() * W; // x
         this.y = Math.random() * H - H; // y
         this.r = randomFromTo(15, 15); // Smaller radius
@@ -340,19 +338,20 @@
     }
 
     function Draw() {
+        let i;
         const results = [];
 
         requestAnimationFrame(Draw);
 
         context.clearRect(0, 0, W, window.innerHeight);
 
-        for (var i = 0; i < maxConfettis; i++) {
+        for (i = 0; i < maxConfettis; i++) {
             results.push(particles[i].draw());
         }
 
         let particle = {};
         let remainingFlakes = 0;
-        for (var i = 0; i < maxConfettis; i++) {
+        for (i = 0; i < maxConfettis; i++) {
             particle = particles[i];
 
             particle.tiltAngle += particle.tiltAngleIncremental;
@@ -369,8 +368,8 @@
         }
     }
 
-    for (var i = 0; i < maxConfettis; i++) {
-        particles.push(new confettiParticle());
+    for (let i = 0; i < maxConfettis; i++) {
+        particles.push(new ConfettiParticle());
     }
 
     Draw();

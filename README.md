@@ -1,10 +1,4 @@
-<!DOCTYPE html>
 <html lang="en">
-
-<head>
-<title>Force Sub Bot Documentation</title>
-</head>
-
 <body>
 
 # Force Sub Bot 

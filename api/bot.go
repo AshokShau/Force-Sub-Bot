@@ -22,7 +22,7 @@ const (
 	statusCodeSuccess = 200
 )
 
-// Handles all incoming traffic from webhooks.
+// Bot Handles all incoming traffic from webhooks.
 func Bot(w http.ResponseWriter, r *http.Request) {
 	url := r.URL.Path
 
@@ -38,11 +38,10 @@ func Bot(w http.ResponseWriter, r *http.Request) {
 
 	bot, _ := gotgbot.NewBot(botToken, &gotgbot.BotOpts{DisableTokenCheck: true})
 
-	// Delete the webhook incase token is unauthorized.
+	// Delete the webhook in case token is unauthorized.
 	if lenAllowedTokens > 0 && allowedTokens[0] != "" && !config.FindInStringSlice(allowedTokens, botToken) {
-		bot.DeleteWebhook(&gotgbot.DeleteWebhookOpts{}) //nolint:errcheck // It doesn't matter if it errors
+		_, _ = bot.DeleteWebhook(&gotgbot.DeleteWebhookOpts{}) // It doesn't matter if it errors
 		w.WriteHeader(statusCodeSuccess)
-
 		return
 	}
 
@@ -50,9 +49,8 @@ func Bot(w http.ResponseWriter, r *http.Request) {
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		fmt.Fprintf(w, "Error reading request body: %v", err)
+		_, err = fmt.Fprintf(w, "Error reading request body: %v", err)
 		w.WriteHeader(statusCodeSuccess)
-
 		return
 	}
 
