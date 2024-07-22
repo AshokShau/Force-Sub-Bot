@@ -5,7 +5,6 @@ import (
 	"github.com/Abishnoi69/Force-Sub-Bot/FallenSub/config"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
-	"os"
 	"time"
 )
 
@@ -48,33 +47,6 @@ func ping(b *gotgbot.Bot, ctx *ext.Context) error {
 	_, _, err = msg.EditText(b, "Pong! "+latency.String(), nil)
 	if err != nil {
 		config.ErrorLog.Printf("[Ping] Error editing message - %v", err)
-		return err
-	}
-
-	return ext.EndGroups
-}
-
-// logs sends the log file to the owner.
-func logs(b *gotgbot.Bot, ctx *ext.Context) error {
-	if ctx.EffectiveUser.Id != config.OwnerId {
-		return ext.EndGroups
-	}
-
-	file, err := os.Open("log.txt")
-	if err != nil {
-		_, _ = ctx.EffectiveMessage.Reply(b, "404: logs file not found.", nil)
-		return err
-	}
-	defer func(file *os.File) {
-		err = file.Close()
-		if err != nil {
-			fmt.Println(err)
-		}
-	}(file)
-
-	_, err = b.SendDocument(config.OwnerId, gotgbot.InputFileByReader("log.txt", file), nil)
-	if err != nil {
-		config.ErrorLog.Printf("[Logs] Error sending document - %v ", err)
 		return err
 	}
 
