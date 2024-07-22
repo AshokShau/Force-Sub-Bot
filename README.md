@@ -7,7 +7,7 @@
 
 <body>
 
-<h1>Force Sub Bot</h1>
+# Force Sub Bot [![Go Build](https://github.com/Abishnoi69/Force-Sub-Bot/workflows/build/badge.svg)](https://github.com/Abishnoi69/Force-Sub-Bot/actions?query=workflow%3Abuild+event%3Apush+branch%3Amain)
 <p>This project includes a Telegram bot designed to enforce subscription to a specific channel before allowing users to interact in a group chat. It's built using <a href="https://go.dev">Go</a> and integrates with the Telegram Bot API using <a href="https://github.com/PaulSonOfLars/gotgbot">gotgbot</a>.</p>
 
 <section>
