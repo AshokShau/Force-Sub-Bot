@@ -40,7 +40,7 @@ func Bot(w http.ResponseWriter, r *http.Request) {
 
 	// Delete the webhook in case token is unauthorized.
 	if lenAllowedTokens > 0 && allowedTokens[0] != "" && !config.FindInStringSlice(allowedTokens, botToken) {
-		_, _ = bot.DeleteWebhook(&gotgbot.DeleteWebhookOpts{}) // It doesn't matter if it errors
+		_, _ = bot.DeleteWebhook(&gotgbot.DeleteWebhookOpts{DropPendingUpdates: true}) // It doesn't matter if it errors
 		w.WriteHeader(statusCodeSuccess)
 		return
 	}

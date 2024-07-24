@@ -32,11 +32,13 @@ func fSubWatcher(b *gotgbot.Bot, ctx *ext.Context) error {
 		return ext.EndGroups
 	}
 
-	if fSub.ForceSubChannel == 0 || user.IsBot || user.Id == 777000 || user.Id == 1087968824 || user.Id == config.OwnerId || ctx.EffectiveSender.IsAnonymousAdmin() {
+	if fSub.ForceSubChannel == 0 || user.IsBot || user.Id == 777000 || user.Id == 1087968824 || ctx.EffectiveSender.IsAnonymousAdmin() {
 		return ext.EndGroups
 	}
 
-	// Todo: check if the user is an admin
+	if isAdmin(ctx.EffectiveChat, ctx.EffectiveUser, b) {
+		return ext.EndGroups
+	}
 
 	member, err := b.GetChatMember(fSub.ForceSubChannel, user.Id, nil)
 	if err != nil {

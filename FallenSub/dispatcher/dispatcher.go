@@ -5,10 +5,10 @@ import (
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
 
-var Dispatcher = NewDispatcher()
+var Dispatcher = newDispatcher()
 
-// NewDispatcher creates a new dispatcher and loads modules.
-func NewDispatcher() *ext.Dispatcher {
+// newDispatcher creates a new dispatcher and loads modules.
+func newDispatcher() *ext.Dispatcher {
 	dispatcher := ext.NewDispatcher(nil)
 	modules.LoadModules(dispatcher)
 
