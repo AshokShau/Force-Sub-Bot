@@ -2,7 +2,6 @@ package modules
 
 import (
 	"fmt"
-	"github.com/Abishnoi69/Force-Sub-Bot/FallenSub/config"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"time"
@@ -19,8 +18,7 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 	}
 
 	if _, err := ctx.EffectiveMessage.Reply(b, text, &gotgbot.SendMessageOpts{ReplyMarkup: button}); err != nil {
-		config.ErrorLog.Printf("[Start] Error sending message - %v", err)
-		return err
+		return logError(fmt.Sprintf("[Start] Error sending message - %v", err), err)
 	}
 
 	return ext.EndGroups
@@ -31,11 +29,9 @@ func ping(b *gotgbot.Bot, ctx *ext.Context) error {
 	startTime := time.Now()
 
 	if msg, err := ctx.EffectiveMessage.Reply(b, "Pong!", nil); err != nil {
-		config.ErrorLog.Printf("[Ping] Error sending message - %v", err)
-		return err
+		return logError(fmt.Sprintf("[Ping] Error sending message - %v", err), err)
 	} else if _, _, err := msg.EditText(b, "Pong! "+time.Since(startTime).String(), nil); err != nil {
-		config.ErrorLog.Printf("[Ping] Error editing message - %v", err)
-		return err
+		return logError(fmt.Sprintf("[Ping] Error editing message - %v", err), err)
 	}
 
 	return ext.EndGroups
