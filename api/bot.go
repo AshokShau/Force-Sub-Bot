@@ -35,7 +35,7 @@ func Bot(w http.ResponseWriter, r *http.Request) {
 
 	botToken := split[len(split)-2]
 
-	bot, _ := gotgbot.NewBot(botToken, &gotgbot.BotOpts{DisableTokenCheck: true})
+	bot, _ := gotgbot.NewBot(botToken, &gotgbot.BotOpts{DisableTokenCheck: false})
 
 	// Delete the webhook in case token is unauthorized.
 	if lenAllowedTokens > 0 && allowedTokens[0] != "" && !findInStringSlice(allowedTokens, botToken) {

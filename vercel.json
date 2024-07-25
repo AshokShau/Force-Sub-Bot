@@ -1,19 +1,22 @@
 {
-    "build": {
-      "env": {
-        "GO_BUILD_FLAGS": "-ldflags '-s -w'"
-      }
+  "build": {
+    "env": {
+      "GO_BUILD_FLAGS": "-ldflags '-s -w'"
+    }
+  },
+  "routes": [
+    {
+      "src": "/bot/.*/.*",
+      "dest": "/api/bot.go"
     },
-
-    "routes": [
-        {
-          "src": "/bot/.*/.*",
-          "dest": "/api/bot.go"
-        },
-        {
-          "src": "/",
-          "dest": "/index.html"
-        }
-      ]
+    {
+      "src": "/",
+      "dest": "/index.html"
+    }
+  ],
+  "functions": {
+    "api/bot.go": {
+      "maxDuration": 900
+    }
+  }
 }
-  
