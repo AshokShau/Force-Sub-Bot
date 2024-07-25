@@ -16,7 +16,7 @@
   ],
   "functions": {
     "api/bot.go": {
-      "maxDuration": 900
+      "maxDuration": 50
     }
   }
 }
