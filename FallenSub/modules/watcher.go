@@ -26,7 +26,7 @@ func fSubWatcher(b *gotgbot.Bot, ctx *ext.Context) error {
 	msg := ctx.EffectiveMessage
 
 	user := ctx.EffectiveUser
-	fSub := db.GetFSubSetting(chat.Id)
+	fSub, _ := db.GetFSubSetting(chat.Id)
 
 	if !fSub.ForceSub {
 		return ext.EndGroups
@@ -42,10 +42,15 @@ func fSubWatcher(b *gotgbot.Bot, ctx *ext.Context) error {
 
 	member, err := b.GetChatMember(fSub.ForceSubChannel, user.Id, nil)
 	if err != nil {
-		go db.SetFSub(chat.Id, false)
+		go func() {
+			err = db.SetFSub(chat.Id, false)
+			if err != nil {
+				config.ErrorLog.Printf("[fSubWatcher]Error setting fSub to false: %s [chatId: %d]", err, chat.Id)
+			}
+		}()
 		text := "Force Sub disabled because I can't get your chat member status. Please add me as an admin."
 		_, _ = b.SendMessage(chat.Id, text, nil)
-		config.ErrorLog.Printf("[fSubWatcher]Error getting chat member: %s [chatId: %d]", err, chat.Id)
+		config.ErrorLog.Printf("[fSubWatcher]Error getting chat member: %s [chatId: %d]", err, fSub.ForceSubChannel)
 		return err
 	}
 
@@ -59,7 +64,11 @@ func fSubWatcher(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 
-	db.UpdateMuted(chat.Id, user.Id)
+	err = db.UpdateMuted(chat.Id, user.Id)
+	if err != nil {
+		config.ErrorLog.Printf("[fSubWatcher]Error updating muted user: %s [chatId: %d]", err, chat.Id)
+		return err
+	}
 
 	channel, err := b.GetChat(fSub.ForceSubChannel, nil)
 	if err != nil {
@@ -95,14 +104,19 @@ func unMuteMe(b *gotgbot.Bot, ctx *ext.Context) error {
 	user := ctx.EffectiveUser
 	chat := ctx.EffectiveChat
 
-	if !db.IsMuted(chat.Id, user.Id) {
-		_, err := query.Answer(b, &gotgbot.AnswerCallbackQueryOpts{Text: "You are not muted by me.", ShowAlert: true})
+	isMuted, err := db.IsMuted(chat.Id, user.Id)
+	if !isMuted {
+		_, err = query.Answer(b, &gotgbot.AnswerCallbackQueryOpts{Text: "You are not muted by me.", ShowAlert: true})
 		if err != nil {
 			return err
 		}
 		return ext.EndGroups
 	}
-	fSub := db.GetFSubSetting(chat.Id)
+	fSub, err := db.GetFSubSetting(chat.Id)
+	if err != nil {
+		config.ErrorLog.Printf("[unMuteMe]Error getting fSub setting: %s [chatId: %d]", err, chat.Id)
+		return err
+	}
 
 	member, err := b.GetChatMember(fSub.ForceSubChannel, user.Id, nil)
 	if err != nil {
@@ -132,7 +146,11 @@ func unMuteMe(b *gotgbot.Bot, ctx *ext.Context) error {
 		return err
 	}
 
-	db.RemoveMuted(chat.Id, user.Id)
+	err = db.RemoveMuted(chat.Id, user.Id)
+	if err != nil {
+		config.ErrorLog.Printf("[unMuteMe]Error removing muted user: %s [chatId: %d]", err, chat.Id)
+		return err
+	}
 
 	_, err = query.Answer(b, &gotgbot.AnswerCallbackQueryOpts{Text: "You are unMuted now.", ShowAlert: true})
 	if err != nil {

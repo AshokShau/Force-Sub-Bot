@@ -8,7 +8,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Abishnoi69/Force-Sub-Bot/FallenSub/config"
 	"github.com/Abishnoi69/Force-Sub-Bot/FallenSub/dispatcher"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 )
@@ -39,7 +38,7 @@ func Bot(w http.ResponseWriter, r *http.Request) {
 	bot, _ := gotgbot.NewBot(botToken, &gotgbot.BotOpts{DisableTokenCheck: true})
 
 	// Delete the webhook in case token is unauthorized.
-	if lenAllowedTokens > 0 && allowedTokens[0] != "" && !config.FindInStringSlice(allowedTokens, botToken) {
+	if lenAllowedTokens > 0 && allowedTokens[0] != "" && !findInStringSlice(allowedTokens, botToken) {
 		_, _ = bot.DeleteWebhook(&gotgbot.DeleteWebhookOpts{DropPendingUpdates: true}) // It doesn't matter if it errors
 		w.WriteHeader(statusCodeSuccess)
 		return
@@ -70,4 +69,13 @@ func Bot(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(statusCodeSuccess)
+}
+
+func findInStringSlice(slice []string, val string) bool {
+	for _, item := range slice {
+		if item == val {
+			return true
+		}
+	}
+	return false
 }
