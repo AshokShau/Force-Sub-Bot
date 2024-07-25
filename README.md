@@ -49,7 +49,7 @@ source /etc/profile.d/golang_path.sh</code></pre>
 <li>Login your <a href="https://vercel.com/">Vercel</a> account </li>
 <li>Go to your <a href="https://vercel.com/new">Add New Project</a></li>
 <li>Choose the repository you forked</li>
-<li>Configure the environment variables: <code>DB_URI</code></li>
+<li>Configure the environment variables: <code>DB_URI</code> <a href="https://app.redislabs.com/">Redis</a></li>
 <li>Tap on Deploy</li>
 </ol>
 </section>

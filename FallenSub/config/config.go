@@ -12,7 +12,6 @@ var (
 	OwnerId     int64
 	LoggerId    int64
 	DatabaseURI string
-	DbName      string
 )
 
 var (
@@ -24,7 +23,6 @@ func init() {
 	_ = godotenv.Load()
 
 	DatabaseURI = os.Getenv("DB_URI")
-	DbName = os.Getenv("DB_NAME")
 	Token = os.Getenv("TOKEN")
 	OwnerId = toInt64(os.Getenv("OWNER_ID"))
 	LoggerId = toInt64(os.Getenv("LOGGER_ID"))
