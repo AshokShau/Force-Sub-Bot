@@ -3,7 +3,14 @@
 
 <h1>Force Sub Bot</h1>
 
+<section>
+<div align="center">
 <a href="https://github.com/Abishnoi69/Force-Sub-Bot/actions?query=workflow%3Abuild+event%3Apush+branch%3Amain"><img src="https://github.com/Abishnoi69/Force-Sub-Bot/workflows/build/badge.svg" alt="build"></a>
+<a href="https://goreportcard.com/report/Abishnoi69/Force-Sub-Bot"><img src="https://goreportcard.com/badge/Abishnoi69/Force-Sub-Bot" alt="Go Report Card"></a>
+<a href="https://github.com/Abishnoi69/Force-Sub-Bot/blob/main/go.mod"><img src="https://img.shields.io/github/go-mod/go-version/Abishnoi69/Force-Sub-Bot?logo=go" alt="Go Version"></a>
+</div>
+</section>
+
 
 <p>This project includes a Telegram bot designed to enforce subscription to a specific channel before allowing users to interact in a group chat. It's built using <a href="https://go.dev">Go</a> and integrates with the Telegram Bot API using <a href="https://github.com/PaulSonOfLars/gotgbot">gotgbot</a>.</p>
 
