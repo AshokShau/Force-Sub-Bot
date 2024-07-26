@@ -98,3 +98,52 @@ func logError(message string, err error) error {
 	config.ErrorLog.Printf("[ForceSub] %s: %v", message, err)
 	return err
 }
+
+// unMuteMe unMutes the user if they have joined the channel.
+func unMuteMe(b *gotgbot.Bot, ctx *ext.Context) error {
+	query := ctx.Update.CallbackQuery
+	user := ctx.EffectiveUser
+	chat := ctx.EffectiveChat
+
+	isMuted, err := db.IsMuted(chat.Id, user.Id)
+	if !isMuted {
+		_, _ = query.Answer(b, &gotgbot.AnswerCallbackQueryOpts{Text: "You are not muted by me.", ShowAlert: true})
+		return err
+	}
+
+	fSub, err := db.GetFSubSetting(chat.Id)
+	if err != nil {
+		return logError(fmt.Sprintf("[unMuteMe]Error getting fSub setting: %s [chatId: %d]", err, chat.Id), err)
+	}
+
+	member, err := b.GetChatMember(fSub.ForceSubChannel, user.Id, nil)
+	if err != nil {
+		return logError(fmt.Sprintf("[unMuteMe]Error getting chat member: %s [chatId: %d]", err, chat.Id), err)
+	}
+
+	stats := member.MergeChatMember()
+
+	if stats.Status != "member" && stats.Status != "administrator" && stats.Status != "creator" {
+		_, _ = query.Answer(b, &gotgbot.AnswerCallbackQueryOpts{Text: "You are not a member of the channel.\nTap on Join Channel Button", ShowAlert: true})
+		return err
+	}
+
+	c, err := b.GetChat(chat.Id, nil)
+	if err != nil {
+		_, _ = query.Answer(b, &gotgbot.AnswerCallbackQueryOpts{Text: "Error getting chat info.", ShowAlert: true})
+		return logError(fmt.Sprintf("[unMuteMe]Error getting chat info: %s [chatId: %d]", err, chat.Id), err)
+	}
+
+	_, err = b.RestrictChatMember(chat.Id, user.Id, *c.Permissions, &gotgbot.RestrictChatMemberOpts{UseIndependentChatPermissions: true})
+	if err != nil {
+		_, _ = query.Answer(b, &gotgbot.AnswerCallbackQueryOpts{Text: "Error unMuting you.\nmaybe i am not admin with enough rights.", ShowAlert: true})
+		return logError(fmt.Sprintf("[unMuteMe]Error restricting user: %s [chatId: %d]", err, chat.Id), err)
+	}
+
+	_ = db.RemoveMuted(chat.Id, user.Id)
+
+	_, _ = query.Answer(b, &gotgbot.AnswerCallbackQueryOpts{Text: "You are unMuted now.", ShowAlert: true})
+	_, _, _ = query.Message.EditText(b, "You are now unMuted and can participate in the chat again.", nil)
+
+	return ext.EndGroups
+}

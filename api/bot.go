@@ -48,7 +48,7 @@ func Bot(w http.ResponseWriter, r *http.Request) {
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		_, err = fmt.Fprintf(w, "Error reading request body: %v", err)
+		_, _ = fmt.Fprintf(w, "Error reading request body: %v", err)
 		w.WriteHeader(statusCodeSuccess)
 		return
 	}
