@@ -11,10 +11,22 @@ import (
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
 	text := fmt.Sprintf("Hello, %s!\n\nI am a bot that can help you manage your group by forcing users to join a channel before they can send messages in the group.\n\nTo get started, add me to your group and make me an admin with ban users permission. Then, set the channel that you want users to join using /fsub command.\n\nFor more information, click the button below.", ctx.EffectiveMessage.From.FirstName)
 	button := gotgbot.InlineKeyboardMarkup{
-		InlineKeyboard: [][]gotgbot.InlineKeyboardButton{{{
-			Text: "Help",
-			Url:  "https://abishnoi69.github.io/Force-Sub-Bot/",
-		}}},
+		InlineKeyboard: [][]gotgbot.InlineKeyboardButton{
+			{{
+				Text: "Add Me To Your Group",
+				Url:  fmt.Sprintf("https://t.me/%s?startgroup=true", b.Username),
+			}},
+			{
+				{
+					Text: "Update Channel",
+					Url:  "https://t.me/FallenProjects",
+				},
+				{
+					Text: "Help",
+					Url:  "https://abishnoi69.github.io/Force-Sub-Bot/#commands",
+				},
+			},
+		},
 	}
 
 	if _, err := ctx.EffectiveMessage.Reply(b, text, &gotgbot.SendMessageOpts{ReplyMarkup: button}); err != nil {

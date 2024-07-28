@@ -62,7 +62,12 @@ func handleCommand(ctx *ext.Context, b *gotgbot.Bot) error {
 	}
 	var text string
 	if len(ctx.Args()) == 1 {
+		if fSub.ForceSubChannel == 0 {
+			text = fmt.Sprintf("Force Sub is %s in %s. \nNo channel set.", onOff(fSub.ForceSub), ctx.EffectiveChat.Title)
+		}
+
 		text = fmt.Sprintf("Force Sub is %s in %s. \nChannelID: %d", onOff(fSub.ForceSub), ctx.EffectiveChat.Title, fSub.ForceSubChannel)
+
 	} else {
 		switch ctx.Args()[1] {
 		case "enable", "on", "true", "y", "yes":
@@ -72,7 +77,7 @@ func handleCommand(ctx *ext.Context, b *gotgbot.Bot) error {
 			text = "Force Sub is already enabled."
 		case "disable", "off", "false", "n", "no":
 			if fSub.ForceSub {
-				if err := db.SetFSub(ctx.EffectiveChat.Id, false); err != nil {
+				if err = db.SetFSub(ctx.EffectiveChat.Id, false); err != nil {
 					return logError("Error disabling Force Sub", err)
 				}
 				text = "Force Sub disabled."

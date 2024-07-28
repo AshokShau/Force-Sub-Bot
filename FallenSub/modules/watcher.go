@@ -26,7 +26,7 @@ func isUserExempt(ctx *ext.Context, fSub db.FSub) bool {
 
 func handleGetChatMemberError(b *gotgbot.Bot, chat *gotgbot.Chat, fSub db.FSub, err error) error {
 	_ = db.SetFSub(chat.Id, false)
-	text := "Force Sub disabled because I can't get your chat member status. Please add me as an admin."
+	text := "Force Sub disabled because I can't get your chat member status. Please add me as an admin in your channel and enable force sub again."
 	_, _ = b.SendMessage(chat.Id, text, nil)
 	return logError(fmt.Sprintf("[fSubWatcher]Error getting chat member: %s [chatId: %d]", err, fSub.ForceSubChannel), err)
 }
@@ -40,7 +40,7 @@ func restrictUser(b *gotgbot.Bot, chat *gotgbot.Chat, user *gotgbot.User) error 
 }
 
 func sendJoinChannelMessage(b *gotgbot.Bot, msg *gotgbot.Message, chat *gotgbot.Chat, user *gotgbot.User, inviteLink string) error {
-	text := "You must join the channel to continue using this group."
+	text := fmt.Sprintf("🚫 Dear %s,\n\nTo send messages in this group, you must join our channel first. Please click the 'Join Channel' button below to join the channel. After joining, click the 'Unmute Me' button to regain your messaging privileges.\n\nThank you for your cooperation!", user.FirstName)
 	button := gotgbot.InlineKeyboardMarkup{
 		InlineKeyboard: [][]gotgbot.InlineKeyboardButton{{
 			{
