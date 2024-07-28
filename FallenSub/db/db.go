@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"github.com/Abishnoi69/Force-Sub-Bot/FallenSub/config"
 	"github.com/go-redis/redis/v8"
 	"log"
@@ -40,16 +41,26 @@ func redisKey(chatId int64) string {
 	return "forceSub:" + strconv.FormatInt(chatId, 10)
 }
 
+// findInInt64Slice checks if a value is in a slice or not
+func findInInt64Slice(slice []int64, val int64) bool {
+	for _, item := range slice {
+		if item == val {
+			return true
+		}
+	}
+	return false
+}
+
 // GetFSubSetting gets the FSub setting for a chat
 func GetFSubSetting(chatId int64) (*FSub, error) {
 	data, err := rdb.Get(ctx, redisKey(chatId)).Result()
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return &FSub{ChatId: chatId}, nil
 	} else if err != nil {
 		return nil, err
 	}
 	var fSub FSub
-	if err := json.Unmarshal([]byte(data), &fSub); err != nil {
+	if err = json.Unmarshal([]byte(data), &fSub); err != nil {
 		return nil, err
 	}
 	return &fSub, nil
@@ -119,14 +130,4 @@ func IsMuted(chatId int64, userId int64) (bool, error) {
 		return false, err
 	}
 	return findInInt64Slice(fSub.FSubMuted, userId), nil
-}
-
-// findInInt64Slice checks if a value is in a slice or not
-func findInInt64Slice(slice []int64, val int64) bool {
-	for _, item := range slice {
-		if item == val {
-			return true
-		}
-	}
-	return false
 }

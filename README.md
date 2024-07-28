@@ -72,6 +72,11 @@ source /etc/profile.d/golang_path.sh</code></pre>
 <li><code>/fsub on</code> - Enable force subscription mode.</li>
 <li><code>/fsub off</code> - Disable force subscription mode.</li>
 <li><code>/fsub</code> - Get the current force subscription status.</li>
+
+<h4>Owner Only Commands</h4>
+<li><code>/getChats</code> - Get all chats.</li>
+<li><code>/getUsers</code> - Get all users who started in private.</li>
+<li><code>/getAllBots</code> - Get all bots running on webhook.</li>
 </ul>
 </section>
 

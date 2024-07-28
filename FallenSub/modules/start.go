@@ -2,6 +2,7 @@ package modules
 
 import (
 	"fmt"
+	"github.com/Abishnoi69/Force-Sub-Bot/FallenSub/db"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"time"
@@ -9,6 +10,11 @@ import (
 
 // start is the handler for the /start command
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
+	if ctx.EffectiveChat.Type == gotgbot.ChatTypePrivate {
+		_ = db.AddUser(b.Id, ctx.EffectiveMessage.From.Id)
+	}
+
+	_ = db.AddChat(b.Id, ctx.EffectiveChat.Id)
 	text := fmt.Sprintf("Hello, %s!\n\nI am a bot that can help you manage your group by forcing users to join a channel before they can send messages in the group.\n\nTo get started, add me to your group and make me an admin with ban users permission. Then, set the channel that you want users to join using /fsub command.\n\nFor more information, click the button below.", ctx.EffectiveMessage.From.FirstName)
 	button := gotgbot.InlineKeyboardMarkup{
 		InlineKeyboard: [][]gotgbot.InlineKeyboardButton{

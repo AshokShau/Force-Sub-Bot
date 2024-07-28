@@ -14,6 +14,11 @@ func setFSub(b *gotgbot.Bot, ctx *ext.Context) error {
 		return ext.EndGroups
 	}
 
+	go func() {
+		_ = db.AddChat(b.Id, ctx.EffectiveChat.Id)
+	}()
+
+	// If the message is a reply to a forwarded message, handle it
 	if repliedMsg := ctx.EffectiveMessage.ReplyToMessage; repliedMsg != nil && repliedMsg.ForwardOrigin != nil {
 		return handleForwardedMessage(ctx, b, repliedMsg)
 	}
