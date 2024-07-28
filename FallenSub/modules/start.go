@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+var StartTime = time.Now()
+
 // start is the handler for the /start command
 func start(b *gotgbot.Bot, ctx *ext.Context) error {
 	if ctx.EffectiveChat.Type == gotgbot.ChatTypePrivate {
@@ -44,11 +46,26 @@ func start(b *gotgbot.Bot, ctx *ext.Context) error {
 
 // ping is the handler for the /ping command
 func ping(b *gotgbot.Bot, ctx *ext.Context) error {
+	msg := ctx.EffectiveMessage
 	startTime := time.Now()
 
-	if msg, err := ctx.EffectiveMessage.Reply(b, "Pong!", nil); err != nil {
+	rest, err := msg.Reply(b, "<code>Pinging</code>", &gotgbot.SendMessageOpts{ParseMode: "HTML"})
+	if err != nil {
 		return logError(fmt.Sprintf("[Ping] Error sending message - %v", err), err)
-	} else if _, _, err := msg.EditText(b, "Pong! "+time.Since(startTime).String(), nil); err != nil {
+	}
+
+	// Calculate latency
+	elapsedTime := time.Since(startTime)
+
+	// Calculate uptime
+	uptime := time.Since(StartTime)
+	formattedUptime := getFormattedDuration(uptime)
+
+	location, _ := time.LoadLocation("Asia/Kolkata")
+	responseText := fmt.Sprintf("Pinged in %vms (Latency: %.2fs) at %s\n\nUptime: %s", elapsedTime.Milliseconds(), elapsedTime.Seconds(), time.Now().In(location).Format(time.RFC1123), formattedUptime)
+
+	_, _, err = rest.EditText(b, responseText, nil)
+	if err != nil {
 		return logError(fmt.Sprintf("[Ping] Error editing message - %v", err), err)
 	}
 
