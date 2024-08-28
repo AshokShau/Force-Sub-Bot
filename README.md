@@ -18,11 +18,11 @@
 <h2>Installation Instructions</h2>
 <h3>Install Go</h3>
 <ol>
-<li>Clone and install Go:
-<pre><code>git clone https://github.com/udhos/update-golang && cd update-golang
-sudo ./update-golang.sh
-source /etc/profile.d/golang_path.sh</code></pre>
-</li>
+
+```shell
+git clone https://github.com/udhos/update-golang dlgo && cd dlgo && sudo ./update-golang.sh && source /etc/profile.d/golang_path.sh
+```
+
 <li>Exit and reopen your terminal, then verify the installation with <code>go version</code>.</li>
 </ol>
 

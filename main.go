@@ -1,10 +1,10 @@
 package main
 
 import (
+	"github.com/Abishnoi69/Force-Sub-Bot/FallenSub/modules"
 	"time"
 
 	"github.com/Abishnoi69/Force-Sub-Bot/FallenSub/config"
-	"github.com/Abishnoi69/Force-Sub-Bot/FallenSub/dispatcher"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 )
@@ -15,7 +15,7 @@ func main() {
 		config.ErrorLog.Fatal("failed to create new bot:", err)
 	}
 
-	updater := ext.NewUpdater(dispatcher.Dispatcher, nil)
+	updater := ext.NewUpdater(modules.Dispatcher, nil)
 	err = updater.StartPolling(b, &ext.PollingOpts{
 		DropPendingUpdates: true,
 		GetUpdatesOpts: &gotgbot.GetUpdatesOpts{

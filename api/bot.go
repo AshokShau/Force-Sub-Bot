@@ -3,12 +3,12 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/Abishnoi69/Force-Sub-Bot/FallenSub/modules"
 	"io"
 	"net/http"
 	"os"
 	"strings"
 
-	"github.com/Abishnoi69/Force-Sub-Bot/FallenSub/dispatcher"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 )
 
@@ -63,7 +63,7 @@ func Bot(w http.ResponseWriter, r *http.Request) {
 
 	bot.Username = split[len(split)-1]
 
-	err = dispatcher.Dispatcher.ProcessUpdate(bot, &update, map[string]any{})
+	err = modules.Dispatcher.ProcessUpdate(bot, &update, map[string]any{})
 	if err != nil {
 		fmt.Printf("error while processing update: %v", err)
 	}
