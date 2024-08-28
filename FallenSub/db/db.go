@@ -7,7 +7,10 @@ import (
 	"github.com/Abishnoi69/Force-Sub-Bot/FallenSub/config"
 	"github.com/go-redis/redis/v8"
 	"log"
+	"os"
+	"os/signal"
 	"strconv"
+	"syscall"
 )
 
 var (
@@ -16,7 +19,6 @@ var (
 )
 
 func init() {
-
 	opt, err := redis.ParseURL(config.DatabaseURI)
 	if err != nil {
 		log.Fatalf("[Database][Connect]: %v", err)
@@ -28,6 +30,26 @@ func init() {
 	}
 
 	log.Println("[Database][Connect]: Connected to Redis")
+
+	// Setup signal handling to ensure graceful shutdown
+	go handleSignals()
+}
+
+// Handle OS signals for graceful shutdown
+func handleSignals() {
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
+	<-signals
+	Shutdown()
+}
+
+// Shutdown performs cleanup tasks
+func Shutdown() {
+	if err := rdb.Close(); err != nil {
+		log.Printf("error closing Redis client: %v", err)
+	}
+
+	log.Println("shutdown complete")
 }
 
 type FSub struct {
